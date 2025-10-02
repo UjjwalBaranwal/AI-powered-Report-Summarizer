@@ -1,4 +1,4 @@
-const CANONICAL = require("../utils/canonical");
+const { CANONICAL } = require("../utils/canonical");
 const Test = require("../Model/reportModel");
 
 // function to normalize the single test
@@ -30,6 +30,8 @@ function buildSummary(tests) {
 // Main function to process the raw test that come from the input
 
 async function processReport(rawTests) {
+  console.log(rawTests);
+
   const normalized = rawTests
     .map((t) => normalizeTest(t.name, t.value))
     .filter(Boolean);
