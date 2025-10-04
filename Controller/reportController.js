@@ -35,6 +35,7 @@
 
 const { processReport } = require("../Services/reportServices");
 const { parseReportFromImage } = require("../Services/OCRService");
+const { getExplanation } = require("../Services/llmReportExplanationService");
 
 const analyzeReport = async (req, res) => {
   try {
@@ -42,8 +43,8 @@ const analyzeReport = async (req, res) => {
 
     // console.log(req.body);
     // console.log("Headers:", req.headers);
-    console.log("Body:", req.body);
-    console.log("File:", req.file);
+    // console.log("Body:", req.body);
+    // console.log("File:", req.file);
     // Step 1: JSON input
     if (req.body?.tests && Array.isArray(req.body?.tests)) {
       parsedTests = req.body.tests;
@@ -61,7 +62,10 @@ const analyzeReport = async (req, res) => {
 
     const result = await processReport(parsedTests);
     // console.log(result);
-    res.status(200).json(result);
+    const explanation = await getExplanation(result);
+    // console.log(explanation);
+
+    res.status(200).json({ ...result, explanation });
   } catch (err) {
     console.log(err);
 
